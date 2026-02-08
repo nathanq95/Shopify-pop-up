@@ -28,10 +28,12 @@ assets/goodr_logo_white.svg
 4. Click **⋯ (...)** → **Edit code**
 
 **Add the section**
-5. Drag the `popup.liquid` file to the **Sections** folder.
+
+Drag the `popup.liquid` file to the **Sections** folder.
 
 **Add required assets**
-6. Drag the following files to the **Assets** folder:
+
+Drag the following files to the **Assets** folder:
     - `popup.css`
     - `popup.js`
     - `x.svg`
