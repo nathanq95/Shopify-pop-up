@@ -1,0 +1,170 @@
+<script
+  src="{{ 'popup.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{{ 'popup.css' | asset_url | stylesheet_tag }}
+
+{%- assign title_id = 'goodr-popup-title-' | append: section.id -%}
+{%- assign desc_id  = 'goodr-popup-desc-'  | append: section.id -%}
+
+<popup-component
+  class="goodr-popup"
+  data-goodr-popup-root
+  aria-hidden="true"
+  data-section-id="{{ section.id }}"
+  data-config='{
+    "trigger": "{{ section.settings.trigger | default: 'delay' }}",
+    "delayMs": {{ section.settings.delay_ms | default: 3000 }},
+    "scrollPercent": {{ section.settings.scroll_percent | default: 50 }},
+    "dismissHours": {{ section.settings.dismiss_hours | default: 0 }}
+  }'
+>
+  <div class="goodr-popup__overlay" ref="overlay" aria-hidden="true"></div>
+
+  <div
+    class="goodr-popup__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="{{ title_id }}"
+    aria-describedby="{{ desc_id }}"
+    tabindex="-1"
+    ref="dialog"
+  >
+    <div class="goodr-popup__card">
+      <button
+        type="button"
+        class="goodr-popup__close"
+        aria-label="Close popup"
+        ref="close"
+      >
+        <img
+          src="{{ 'x.svg' | asset_url }}"
+          alt=""
+          width="24"
+          height="24"
+        >
+      </button>
+
+      <div class="goodr-popup__media">
+        {% if section.settings.image != blank %}
+          {% assign popup_image = section.settings.image %}
+          <img
+            src="{{ popup_image | image_url: width: 800 }}"
+            alt="{{ section.settings.image_alt }}"
+            width="{{ popup_image.width }}"
+            height="{{ popup_image.height }}"
+            class="goodr-popup__img"
+            loading="lazy"
+          >
+        {% endif %}
+
+        <div class="goodr-popup__brand" aria-hidden="true">
+          <img
+            src="{{ 'goodr_logo_white.svg' | asset_url }}"
+            alt=""
+            width="24"
+            height="24"
+          >
+        </div>
+      </div>
+
+      <div class="goodr-popup__content">
+        <h2 id="{{ title_id }}" class="goodr-popup__title">
+          USE CODE
+          <span class="goodr-popup__code">
+            <span class="goodr-popup__codeValue">
+              {{ section.settings.code }}
+            </span>
+          </span>
+          FOR $5 OFF<br>
+          YOUR FIRST ORDER
+        </h2>
+
+        <p id="{{ desc_id }}" class="visually-hidden">
+          Promotional popup. Use the Shop All Styles link to navigate, or close to dismiss.
+        </p>
+
+        <a
+          href="{{ section.settings.cta_url }}"
+          class="goodr-popup__cta"
+          ref="cta"
+        >
+          SHOP ALL STYLES
+        </a>
+
+        <button
+          type="button"
+          class="goodr-popup__secondary"
+          ref="secondary"
+        >
+          NAH, I HATE DEALS
+        </button>
+      </div>
+    </div>
+  </div>
+</popup-component>
+
+{% schema %}
+{
+  "name": "goodr Promo Popup",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Popup image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Cyclist wearing goodr sunglasses"
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Promo code",
+      "default": "GOODR5"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    },
+    {
+      "type": "select",
+      "id": "trigger",
+      "label": "Popup trigger",
+      "default": "delay",
+      "options": [
+        { "value": "delay", "label": "After delay" },
+        { "value": "scroll", "label": "On scroll" }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "delay_ms",
+      "label": "Delay (ms)",
+      "default": 3000
+    },
+    {
+      "type": "number",
+      "id": "scroll_percent",
+      "label": "Scroll percentage",
+      "default": 50
+    },
+    {
+      "type": "number",
+      "id": "dismiss_hours",
+      "label": "Dismiss duration (hours)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "goodr Promo Popup"
+    }
+  ]
+}
+{% endschema %}
